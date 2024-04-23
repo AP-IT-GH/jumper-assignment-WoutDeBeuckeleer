@@ -2,19 +2,22 @@ using UnityEngine;
 
 public class ObjectMover : MonoBehaviour
 {
-    public float speed = 5f; // Speed of movement
-    public float boundaryZ = 10f; // Boundary to switch direction
+    private float speed;
+    public float boundaryZ = 10f; 
+    void Start()
+    {
+        if (gameObject.CompareTag("obstacle"))
+        {
+            speed = Mathf.RoundToInt(Random.Range(4f, 12f)); 
+        }
+        else if (gameObject.CompareTag("reward"))
+        {
+            speed = Mathf.RoundToInt(Random.Range(8f, 10f));
+        }
+    }
 
     void Update()
     {
-        // Move the object
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
-        // Check if the object is beyond the boundary
-        if (transform.position.z >= boundaryZ || transform.position.z <= -boundaryZ)
-        {
-            // Reverse the direction
-            speed *= -1;
-        }
     }
 }

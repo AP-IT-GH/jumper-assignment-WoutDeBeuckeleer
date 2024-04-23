@@ -4,80 +4,98 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.Barracuda;
+using UnityEngine.UIElements;
 
 public class PlayerAgent : Agent
 {
-    public float jumpForce = 5f;
-    public float checkRadius = 1f;
-    public Vector3 detectionsize = new Vector3(5f, 5f, 5f);
-    private bool isJumping = false;
+    public Transform obstacle;
+    public Transform reward;
+    public float jumpForce = 10f;
+    public float speed = 1f;
+    public float obstacleProximityRadius = 6f;
+    private Rigidbody rb;
+    public GameObject rewardObject;
+
+    public override void Initialize()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     public override void OnEpisodeBegin()
     {
-        Debug.ClearDeveloperConsole();
-        transform.localPosition = new Vector3(0f, 1.5f, 0f);
-        isJumping = false;
+        transform.position = new Vector3(0f, 1.5f, 0f);
+        obstacle.position = new Vector3(0f, 0.54f, -19.81f);
+        reward.GetComponent<Renderer>().enabled = true;
+        reward.position = new Vector3(0f, 5.27f, -25.76f);
     }
+
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(this.transform.localPosition); // Observation for agent position
-    }
-    public override void OnActionReceived(ActionBuffers actions)
-    {
-        // Check if an enemy is nearby
-        bool enemyNearby = CheckEnemyNearby();
-
-        // Jump only if there is an enemy nearby and the agent is not already jumping
-        if (actions.DiscreteActions[0] == 1 && !isJumping)
-        {
-            Jump();
-            if (enemyNearby)
-            {
-                SetReward(1f);
-                Debug.Log("SetReward");
-                isJumping = true; // Set jumping flag
-            }
+        sensor.AddObservation(rb.velocity);
+        sensor.AddObservation(obstacle.position - transform.position);
+        if (reward != null) {
+            sensor.AddObservation(reward.position);
         }
     }
 
-    private void Jump()
+    public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        // Apply jump force upwards
-        GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isJumping = true;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("collide");
-
-        if (collision.gameObject.tag == "enemy")
+        int action = actionBuffers.DiscreteActions[0];
+        float distanceToClosestObstacle = float.MaxValue;
+        if (obstacle != null)
         {
-            SetReward(-1f); // Punish the agent for colliding with an enemy
-            Debug.Log("punishment has been given");
-            isJumping = false; // Reset jumping flag when landing
+            float distance = Vector3.Distance(transform.position, obstacle.position);
+            if (distance < distanceToClosestObstacle)
+            {
+                distanceToClosestObstacle = distance;
+            }
+        }
+
+        // Jump
+        if (action == 1)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+
+        //catch reward
+        /*Debug.Log(reward.position);
+        Debug.Log(
+        if (Vector3.Distance(reward.position, rb.position) < 0.1f)
+        {
+            Debug.Log("COLLECT REWARD");
+            AddReward(0.5f);
+            Destroy(reward.gameObject);
+        }*/
+
+        if (distanceToClosestObstacle < obstacleProximityRadius) {
+            if (transform.position.y < 3)
+            {
+                Debug.Log("penalty has been given");
+                AddReward(-1f);
+                EndEpisode();
+            }
+        }
+        else if (obstacle.position.z > 15)
+        {
+            Debug.Log("REWARD");
+            AddReward(1f);
             EndEpisode();
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform == reward)
+        {
+            Debug.Log("COLLECT REWARD");
+            AddReward(0.5f);
+            reward.GetComponent<Renderer>().enabled = false;
+        }
+    }
+
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var continiousActionsOut = actionsOut.DiscreteActions;
-        continiousActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0; // Jump action (Space key)
-        Debug.Log("space");
-
-    }
-    private bool CheckEnemyNearby()
-    {
-        Collider[] hitColliders = Physics.OverlapBox(transform.position, detectionsize / 2, Quaternion.identity, LayerMask.GetMask("Default"));
-
-        foreach (Collider collider in hitColliders)
-        {
-            if (collider.CompareTag("enemy"))
-            {
-                return true; // Return true if an enemy is nearby
-            }
-        }
-
-        return false; // Return false if no enemies are nearby
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
     }
 }
