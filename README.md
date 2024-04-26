@@ -1,5 +1,5 @@
  # Documentatie jumper exercise #
-##Inleiding##
+## Inleiding ##
 Voor dit project hebben we ons gericht op het ontwikkelen van een zelflerende agent die in staat is om een bewegend obstakel te ontwijken door erover te springen, terwijl hij ook beloningen ontvangt voor het vangen van objecten die over hem vliegen. De agent wordt getraind met behulp van reinforcement learning-technieken om zijn reacties te optimaliseren.
 Door het gebruik van Unity's ML-Agents Toolkit wordt de agent blootgesteld aan een dynamische en uitdagende leeromgeving. In elke episode krijgt het obstakel een willekeurige snelheid, waardoor de agent adaptief moet zijn en zijn strategieën voortdurend moet aanpassen.
 Het uiteindelijke doel van dit project is om een agent te creëren die zowel obstakels op de grond kan vermijden als bonuspunten kan verdienen door vliegende objecten te vangen, waardoor zijn totale prestaties in de omgeving worden gemaximaliseerd.
