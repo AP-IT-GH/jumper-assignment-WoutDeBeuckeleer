@@ -140,6 +140,8 @@ Zodra deze aanpassingen zijn doorgevoerd, zijn alle objecten en scripts correct 
  
 ## Verloop van de training ##
 ### Resultaat tensorboard ###
+![tensorbord](https://github.com/AP-IT-GH/jumper-assignment-WoutDeBeuckeleer/assets/146332421/3e7c07ae-2b3a-44fe-97e1-dad6fda641ea)
+
  Om de agent te kunnen trainen, moesten we gebruik maken van een jumper.yaml-bestand, dat zich moet bevinden in een map met de naam config binnen de assets. Het jumper.yaml-bestand wordt aangesproken wanneer een training wordt gestart. Het speelt een cruciale rol bij het configureren van verschillende parameters en hyperparameters die de training van de agent beïnvloeden. Dit omvat zaken als het bepalen van de observatieruimte, actieruimte, het gebruikte neurale netwerk, het trainingsalgoritme en vele andere instellingen die essentieel zijn voor het succesvol trainen van een zelflerende agent. Het is essentieel dat de naam van je agent in het YAML-bestand exact overeenkomt met de naam die je hebt opgegeven in de 'Behavior 
 Tensorboard Data:
 Je kan zien aan de hand van de omgevingscurve (Environment Curve): Deze curve toont de prestaties van je agent in de omgeving over de tijd.  Dat de  agent snel leert en al vroeg in de training goede resultaten begint te behalen. De reward gaat naar een perfecte score naarmate de training vordert.
