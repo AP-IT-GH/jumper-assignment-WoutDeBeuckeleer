@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1714076534",
+        "python_version": "3.9.18 (main, Sep 11 2023, 14:09:26) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\tanee\\anaconda3\\envs\\VR_Experience\\Scripts\\mlagents-learn config/jumper.yaml --run-id=CubeAgentJumper2",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cu110",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1714076543"
+    },
+    "total": 9.3113392,
+    "count": 1,
+    "self": 0.015585700000000813,
+    "children": {
+        "run_training.setup": {
+            "total": 0.11747710000000011,
+            "count": 1,
+            "self": 0.11747710000000011
+        },
+        "TrainerController.start_learning": {
+            "total": 9.1782764,
+            "count": 1,
+            "self": 0.0001601999999998327,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 9.1780568,
+                    "count": 1,
+                    "self": 9.1780568
+                },
+                "TrainerController._save_models": {
+                    "total": 5.939999999959866e-05,
+                    "count": 1,
+                    "self": 5.939999999959866e-05
+                }
+            }
+        }
+    }
+}

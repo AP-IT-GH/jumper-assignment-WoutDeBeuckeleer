@@ -32,7 +32,9 @@ public class PlayerAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        sensor.AddObservation(this.transform.position);
         sensor.AddObservation(rb.velocity);
+        sensor.AddObservation(obstacle.position);
         sensor.AddObservation(obstacle.position - transform.position);
         if (reward != null) {
             sensor.AddObservation(reward.position);
@@ -41,7 +43,6 @@ public class PlayerAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        int action = actionBuffers.DiscreteActions[0];
         float distanceToClosestObstacle = float.MaxValue;
         if (obstacle != null)
         {
@@ -52,20 +53,16 @@ public class PlayerAgent : Agent
             }
         }
 
+        // Acties, size = 2
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.y = actionBuffers.ContinuousActions[0];
+        transform.Translate(new Vector3(controlSignal.x * 0.1f, controlSignal.y * speed, controlSignal.z * 0.1f));
+
+
         // Jump
-        if (action == 1)
+        /*if (action == 0 || distanceToClosestObstacle < obstacleProximityRadius)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-
-        //catch reward
-        /*Debug.Log(reward.position);
-        Debug.Log(
-        if (Vector3.Distance(reward.position, rb.position) < 0.1f)
-        {
-            Debug.Log("COLLECT REWARD");
-            AddReward(0.5f);
-            Destroy(reward.gameObject);
         }*/
 
         if (distanceToClosestObstacle < obstacleProximityRadius) {
@@ -95,7 +92,10 @@ public class PlayerAgent : Agent
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var discreteActionsOut = actionsOut.DiscreteActions;
-        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
+        /*var discreteActionsOut = actionsOut.DiscreteActions;
+        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;*/
+        var continiousActionsOut = actionsOut.ContinuousActions;
+        continiousActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1f : 0;
+
     }
 }

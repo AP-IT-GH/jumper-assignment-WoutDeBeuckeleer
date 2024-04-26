@@ -1,0 +1,29 @@
+{
+    "Agent": {
+        "checkpoints": [
+            {
+                "steps": 1821,
+                "file_path": "results\\CubeJumper2\\Agent\\Agent-1821.onnx",
+                "reward": -1.0,
+                "creation_time": 1714077748.6727242,
+                "auxillary_file_paths": [
+                    "results\\CubeJumper2\\Agent\\Agent-1821.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1821,
+            "file_path": "results\\CubeJumper2\\Agent.onnx",
+            "reward": -1.0,
+            "creation_time": 1714077748.6727242,
+            "auxillary_file_paths": [
+                "results\\CubeJumper2\\Agent\\Agent-1821.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

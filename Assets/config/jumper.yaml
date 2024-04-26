@@ -1,5 +1,5 @@
 behaviors:
-  jumper:
+  Agent:
     trainer_type: ppo
     hyperparameters:
       batch_size: 128
